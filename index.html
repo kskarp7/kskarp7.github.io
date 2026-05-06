@@ -26,21 +26,19 @@
       --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
 
       /* surfaces */
-      --bg:       #080812;
-      --surface:  #0e0e1c;
-      --surface2: #141428;
-      --border:   #1e1e38;
-      --border2:  #2a2a48;
+      --bg:       #080810;
+      --surface:  #0d0d1c;
+      --surface2: #121222;
+      --border:   #1c1c34;
+      --border2:  #262644;
 
-      /* brand colours */
-      --cyan:   #22d3ee;
-      --cyan-d: rgba(34,211,238,0.12);
-      --purple: #a78bfa;
-      --pur-d:  rgba(167,139,250,0.12);
-      --green:  #4ade80;
-      --grn-d:  rgba(74,222,128,0.12);
-      --amber:  #fbbf24;
-      --amb-d:  rgba(251,191,36,0.12);
+      /* 3-stop indigo gradient — the only accent hue */
+      --a1: #3730a3;   /* indigo-800  dark  */
+      --a2: #6366f1;   /* indigo-500  mid   */
+      --a3: #a5b4fc;   /* indigo-300  light */
+      --a1-rgb: 55,48,163;
+      --a2-rgb: 99,102,241;
+      --a3-rgb: 165,180,252;
 
       /* text */
       --t1: #f1f5f9;
@@ -94,12 +92,12 @@
 
     .logo {
       font-family: var(--mono); font-weight: 700; font-size: 0.875rem;
-      color: var(--cyan); letter-spacing: 0.06em;
+      color: var(--a3); letter-spacing: 0.06em;
     }
     .logo-cursor {
       display: inline-block;
       width: 2px; height: 0.875rem;
-      background: var(--cyan);
+      background: var(--a3);
       margin-left: 2px;
       vertical-align: middle;
       animation: blink 1.1s step-end infinite;
@@ -113,7 +111,7 @@
       text-transform: uppercase; letter-spacing: 0.1em;
       transition: color 0.2s;
     }
-    .nav-links a:hover { color: var(--cyan); }
+    .nav-links a:hover { color: var(--a3); }
 
     /* ── Layout ── */
     main {
@@ -139,8 +137,8 @@
       content: '';
       position: absolute; top: 0; left: 0; right: 0; height: 2px;
       background: linear-gradient(90deg,
-        transparent 0%, var(--cyan) 25%, var(--purple) 50%,
-        var(--cyan) 75%, transparent 100%);
+        transparent 0%, var(--a1) 20%, var(--a2) 50%,
+        var(--a3) 80%, transparent 100%);
       background-size: 200% 100%;
       animation: shimmer 3s linear infinite;
     }
@@ -150,7 +148,7 @@
     .player-card .ambient {
       position: absolute; top: -80px; right: -80px;
       width: 300px; height: 300px; pointer-events: none;
-      background: radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 65%);
+      background: radial-gradient(circle, rgba(var(--a2-rgb),0.07) 0%, transparent 65%);
     }
 
     /* top row: avatar + info + level */
@@ -179,7 +177,7 @@
     .pc-info { flex: 1; min-width: 0; }
     .pc-class {
       font-family: var(--mono); font-size: 0.625rem;
-      color: var(--cyan); letter-spacing: 0.2em;
+      color: var(--a3); letter-spacing: 0.2em;
       text-transform: uppercase; margin-bottom: var(--s1);
     }
     .pc-name {
@@ -208,14 +206,15 @@
       border: 1px solid; letter-spacing: 0.08em; text-transform: uppercase;
       white-space: nowrap;
     }
-    .bc { color: var(--cyan);   border-color: rgba(34,211,238,0.3);  background: rgba(34,211,238,0.06); }
-    .bg { color: var(--green);  border-color: rgba(74,222,128,0.3);  background: rgba(74,222,128,0.06); }
-    .bp { color: var(--purple); border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.06); }
-    .ba { color: var(--amber);  border-color: rgba(251,191,36,0.3);  background: rgba(251,191,36,0.06); }
+    .bc, .bg, .bp, .ba {
+      color: var(--a3);
+      border-color: rgba(var(--a2-rgb),0.3);
+      background: rgba(var(--a2-rgb),0.06);
+    }
 
     .pc-level { flex-shrink: 0; text-align: right; }
     .lv-label { font-family: var(--mono); font-size: 0.625rem; color: var(--t3); letter-spacing: 0.18em; text-transform: uppercase; }
-    .lv-num   { font-family: var(--mono); font-weight: 700; font-size: 3.5rem; color: var(--cyan); line-height: 1; }
+    .lv-num   { font-family: var(--mono); font-weight: 700; font-size: 3.5rem; color: var(--a3); line-height: 1; }
     .lv-sub   { font-family: var(--mono); font-size: 0.625rem; color: var(--t3); margin-top: var(--s1); }
 
     /* XP bar */
@@ -232,7 +231,7 @@
     }
     .xp-fill {
       height: 100%; width: 0; border-radius: 5px;
-      background: linear-gradient(90deg, var(--cyan) 0%, var(--purple) 100%);
+      background: linear-gradient(90deg, var(--a1) 0%, var(--a2) 55%, var(--a3) 100%);
       transition: width 1.8s cubic-bezier(.4,0,.2,1);
       position: relative;
     }
@@ -260,8 +259,8 @@
       transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     }
     .ach:hover {
-      border-color: var(--cyan);
-      box-shadow: 0 0 12px rgba(34,211,238,0.08);
+      border-color: var(--a2);
+      box-shadow: 0 0 12px rgba(var(--a2-rgb),0.1);
       transform: translateY(-2px);
     }
     .ach-icon { font-size: 0.9rem; line-height: 1; }
@@ -317,9 +316,7 @@
       height: 100%; border-radius: 3px; width: 0;
       transition: width 1.4s cubic-bezier(.4,0,.2,1);
     }
-    .fc { background: linear-gradient(90deg, var(--cyan) 0%, rgba(34,211,238,0.55) 100%); }
-    .fp { background: linear-gradient(90deg, var(--purple) 0%, rgba(167,139,250,0.55) 100%); }
-    .fg { background: linear-gradient(90deg, var(--green) 0%, rgba(74,222,128,0.55) 100%); }
+    .fc, .fp, .fg { background: linear-gradient(90deg, var(--a2) 0%, var(--a3) 100%); }
 
     /* ── Quest log ── */
     .quests { display: flex; flex-direction: column; gap: var(--s3); }
@@ -331,12 +328,12 @@
       /* colored left accent per status */
       border-left: 3px solid var(--border);
     }
-    .quest.active-quest { border-left-color: var(--green); }
+    .quest.active-quest { border-left-color: var(--a2); }
     .quest.done-quest   { border-left-color: var(--border2); }
 
     .quest:hover        { border-color: var(--border2); }
-    .quest.open         { border-color: rgba(34,211,238,0.4); }
-    .quest.open.active-quest { border-color: var(--green); }
+    .quest.open         { border-color: rgba(var(--a2-rgb),0.45); }
+    .quest.open.active-quest { border-color: var(--a2); }
 
     .quest-top {
       display: flex; align-items: center; gap: var(--s3);
@@ -347,7 +344,7 @@
     .q-dot {
       width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
     }
-    .q-dot-green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .q-dot-green { background: var(--a3); box-shadow: 0 0 6px rgba(var(--a3-rgb),0.6); }
     .q-dot-dim   { background: var(--t3); }
 
     .q-name {
@@ -362,11 +359,11 @@
     }
 
     .q-stars {
-      font-size: 0.6875rem; color: var(--amber);
-      letter-spacing: 2px;
+      font-size: 0.6875rem; color: var(--a3);
+      letter-spacing: 2px; opacity: 0.7;
     }
     .q-xp {
-      font-family: var(--mono); font-size: 0.6875rem; color: var(--cyan);
+      font-family: var(--mono); font-size: 0.6875rem; color: var(--a3);
     }
     .q-chev {
       font-size: 0.6rem; color: var(--t3);
@@ -395,7 +392,7 @@
       padding: 3px 0 3px var(--s4); position: relative; line-height: 1.6;
     }
     .q-bullets li::before {
-      content: '▸'; position: absolute; left: 0; color: var(--cyan);
+      content: '▸'; position: absolute; left: 0; color: var(--a3);
     }
     .q-tags { display: flex; flex-wrap: wrap; gap: var(--s2); margin-bottom: var(--s5); }
     .tag {
@@ -410,8 +407,8 @@
       padding: var(--s2) var(--s4); border-radius: var(--r-md);
       text-decoration: none; border: 1px solid; transition: background 0.2s, border-color 0.2s;
     }
-    .ql-primary { color: var(--cyan); border-color: rgba(34,211,238,0.3); background: rgba(34,211,238,0.06); }
-    .ql-primary:hover { background: rgba(34,211,238,0.14); border-color: rgba(34,211,238,0.5); }
+    .ql-primary { color: var(--a3); border-color: rgba(var(--a2-rgb),0.3); background: rgba(var(--a2-rgb),0.06); }
+    .ql-primary:hover { background: rgba(var(--a2-rgb),0.14); border-color: rgba(var(--a2-rgb),0.5); }
     .ql-ghost { color: var(--t3); border-color: var(--border2); background: transparent; }
     .ql-ghost:hover { color: var(--t2); border-color: var(--t3); }
 
@@ -490,7 +487,7 @@
       text-align: center;
       font-family: var(--mono); font-size: 0.6875rem; color: var(--t3);
     }
-    footer a { color: var(--cyan); text-decoration: none; }
+    footer a { color: var(--a3); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
 
     /* ── Reveal animation ── */
@@ -552,7 +549,7 @@
 
       <div class="pc-level">
         <div class="lv-label">// Level</div>
-        <div class="lv-num">21</div>
+        <div class="lv-num">22</div>
         <div class="lv-sub">Florida,&nbsp;US</div>
       </div>
     </div>
@@ -570,7 +567,7 @@
     <div class="achievements">
       <div class="ach">
         <span class="ach-icon">&#127942;</span>
-        <span class="ach-text">CTO at 21</span>
+        <span class="ach-text">CTO at 22</span>
         <span class="ach-tip">Founded SafestOne, leading all tech</span>
       </div>
       <div class="ach">
@@ -935,7 +932,7 @@
   exit      close terminal`,
     whoami: `PLAYER:   Kenneth Karp
 CLASS:    Full-Stack Engineer · AI Systems & Cybersecurity
-LEVEL:    21  |  XP: 1,630 / 2,000
+LEVEL:    22  |  XP: 1,630 / 2,000
 GUILD:    FAU Computer Science (Dec 2026)
 ROLE:     Chief Technical Officer @ SafestOne
 LOCATION: Florida, US`,
