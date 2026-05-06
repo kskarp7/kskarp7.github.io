@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kenneth Karp — Player Profile</title>
+  <meta name="description" content="Kenneth Karp — Full-Stack Engineer & AI/Cybersecurity specialist. CTO at SafestOne, iOS App Store published, FAU CS 2026.">
+  <meta property="og:title" content="Kenneth Karp — Player Profile">
+  <meta property="og:description" content="Full-Stack Engineer · AI & Cybersecurity · Hardware. CTO @ SafestOne. App Store published. FAU CS 2026.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    /* ── Design tokens (8px grid, consistent radius) ── */
+    :root {
+      /* spacing */
+      --s1:  4px;  --s2:  8px;  --s3: 12px;  --s4: 16px;
+      --s5: 20px;  --s6: 24px;  --s8: 32px;  --s10: 40px;
+      --s12: 48px; --s16: 64px;
+
+      /* radius */
+      --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+
+      /* surfaces */
+      --bg:       #080812;
+      --surface:  #0e0e1c;
+      --surface2: #141428;
+      --border:   #1e1e38;
+      --border2:  #2a2a48;
+
+      /* brand colours */
+      --cyan:   #22d3ee;
+      --cyan-d: rgba(34,211,238,0.12);
+      --purple: #a78bfa;
+      --pur-d:  rgba(167,139,250,0.12);
+      --green:  #4ade80;
+      --grn-d:  rgba(74,222,128,0.12);
+      --amber:  #fbbf24;
+      --amb-d:  rgba(251,191,36,0.12);
+
+      /* text */
+      --t1: #f1f5f9;
+      --t2: #94a3b8;
+      --t3: #475569;
+
+      /* fonts */
+      --mono: 'Fira Code', monospace;
+      --sans: 'Inter', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--t1);
+      font-family: var(--sans);
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* grid overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.18;
+    }
+
+    /* subtle scanlines */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 300; pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
+      );
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--s3) var(--s8);
+      background: rgba(8,8,18,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: var(--mono); font-weight: 700; font-size: 0.875rem;
+      color: var(--cyan); letter-spacing: 0.06em;
+    }
+    .logo-cursor {
+      display: inline-block;
+      width: 2px; height: 0.875rem;
+      background: var(--cyan);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 1.1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .nav-links { display: flex; gap: var(--s6); list-style: none; }
+    .nav-links a {
+      font-family: var(--mono); font-size: 0.6875rem;
+      color: var(--t3); text-decoration: none;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+
+    /* ── Layout ── */
+    main {
+      position: relative; z-index: 1;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: var(--s8) var(--s6) var(--s16);
+    }
+
+    /* ── Player card ── */
+    .player-card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: var(--s8);
+      margin-bottom: var(--s8);
+      overflow: hidden;
+    }
+
+    /* animated shimmer top line */
+    .player-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg,
+        transparent 0%, var(--cyan) 25%, var(--purple) 50%,
+        var(--cyan) 75%, transparent 100%);
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+    }
+    @keyframes shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+
+    /* ambient glow */
+    .player-card .ambient {
+      position: absolute; top: -80px; right: -80px;
+      width: 300px; height: 300px; pointer-events: none;
+      background: radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 65%);
+    }
+
+    /* top row: avatar + info + level */
+    .pc-top {
+      display: flex; align-items: flex-start; gap: var(--s6);
+      margin-bottom: var(--s6);
+    }
+
+    .avatar {
+      flex-shrink: 0;
+      width: 80px; height: 80px;
+      border-radius: var(--r-lg);
+      background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-weight: 700; font-size: 1.75rem;
+      color: #fff; position: relative;
+    }
+    .avatar::after {
+      content: '';
+      position: absolute; inset: -2px; z-index: -1;
+      border-radius: calc(var(--r-lg) + 2px);
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      opacity: 0.3; filter: blur(8px);
+    }
+
+    .pc-info { flex: 1; min-width: 0; }
+    .pc-class {
+      font-family: var(--mono); font-size: 0.625rem;
+      color: var(--cyan); letter-spacing: 0.2em;
+      text-transform: uppercase; margin-bottom: var(--s1);
+    }
+    .pc-name {
+      font-weight: 800; font-size: clamp(1.75rem, 4vw, 3rem);
+      line-height: 1.1; margin-bottom: var(--s3);
+      /* gradient text */
+      background: linear-gradient(120deg, var(--t1) 40%, var(--t2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      /* glitch on hover */
+      position: relative; cursor: default;
+    }
+    .pc-name:hover { animation: glitch 0.35s steps(2) 1; }
+    @keyframes glitch {
+      0%,100% { transform: translateX(0)   skewX(0deg); }
+      20%     { transform: translateX(-3px) skewX(-1deg); }
+      40%     { transform: translateX(3px)  skewX(1deg); }
+      60%     { transform: translateX(-2px) skewX(-0.5deg); }
+      80%     { transform: translateX(2px)  skewX(0.5deg); }
+    }
+
+    .pc-badges { display: flex; flex-wrap: wrap; gap: var(--s2); }
+    .badge {
+      font-family: var(--mono); font-size: 0.625rem;
+      padding: 3px 10px; border-radius: var(--r-sm);
+      border: 1px solid; letter-spacing: 0.08em; text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .bc { color: var(--cyan);   border-color: rgba(34,211,238,0.3);  background: rgba(34,211,238,0.06); }
+    .bg { color: var(--green);  border-color: rgba(74,222,128,0.3);  background: rgba(74,222,128,0.06); }
+    .bp { color: var(--purple); border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.06); }
+    .ba { color: var(--amber);  border-color: rgba(251,191,36,0.3);  background: rgba(251,191,36,0.06); }
+
+    .pc-level { flex-shrink: 0; text-align: right; }
+    .lv-label { font-family: var(--mono); font-size: 0.625rem; color: var(--t3); letter-spacing: 0.18em; text-transform: uppercase; }
+    .lv-num   { font-family: var(--mono); font-weight: 700; font-size: 3.5rem; color: var(--cyan); line-height: 1; }
+    .lv-sub   { font-family: var(--mono); font-size: 0.625rem; color: var(--t3); margin-top: var(--s1); }
+
+    /* XP bar */
+    .xp-section { margin-bottom: var(--s6); }
+    .xp-labels {
+      display: flex; justify-content: space-between;
+      font-family: var(--mono); font-size: 0.6875rem; color: var(--t3);
+      margin-bottom: var(--s2);
+    }
+    .xp-track {
+      height: 10px; background: var(--surface2);
+      border-radius: 5px; overflow: hidden;
+      border: 1px solid var(--border2);
+    }
+    .xp-fill {
+      height: 100%; width: 0; border-radius: 5px;
+      background: linear-gradient(90deg, var(--cyan) 0%, var(--purple) 100%);
+      transition: width 1.8s cubic-bezier(.4,0,.2,1);
+      position: relative;
+    }
+    .xp-fill::after {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 48px; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35));
+      animation: xp-shine 2.5s ease-in-out infinite;
+    }
+    @keyframes xp-shine { 0%,100%{opacity:0} 50%{opacity:1} }
+
+    /* Achievements row */
+    .achievements {
+      padding-top: var(--s6);
+      border-top: 1px solid var(--border);
+      display: flex; flex-wrap: wrap; gap: var(--s2);
+    }
+    .ach {
+      position: relative;
+      display: flex; align-items: center; gap: var(--s2);
+      padding: var(--s2) var(--s3);
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--r-md); cursor: default;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .ach:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 12px rgba(34,211,238,0.08);
+      transform: translateY(-2px);
+    }
+    .ach-icon { font-size: 0.9rem; line-height: 1; }
+    .ach-text { font-family: var(--mono); font-size: 0.6875rem; color: var(--t2); white-space: nowrap; }
+    .ach-tip {
+      display: none; position: absolute; z-index: 20;
+      bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+      background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: var(--r-md); padding: var(--s2) var(--s3);
+      font-family: var(--mono); font-size: 0.625rem; color: var(--t2);
+      white-space: nowrap; pointer-events: none;
+    }
+    .ach:hover .ach-tip { display: block; }
+
+    /* ── Section headers ── */
+    .section-head {
+      display: flex; align-items: center; gap: var(--s4);
+      margin: var(--s10) 0 var(--s5);
+    }
+    .section-label {
+      font-family: var(--mono); font-size: 0.6875rem;
+      color: var(--t3); text-transform: uppercase; letter-spacing: 0.18em;
+      white-space: nowrap;
+    }
+    .section-rule { flex: 1; height: 1px; background: var(--border); }
+
+    /* ── Skills grid ── */
+    .skills-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s4);
+    }
+    .skill-panel {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: var(--s5);
+    }
+    .skill-panel-title {
+      font-family: var(--mono); font-size: 0.625rem; color: var(--t3);
+      text-transform: uppercase; letter-spacing: 0.16em;
+      margin-bottom: var(--s4);
+    }
+    .skill { margin-bottom: var(--s4); }
+    .skill:last-child { margin-bottom: 0; }
+    .skill-meta {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .skill-name { font-family: var(--mono); font-size: 0.75rem; color: var(--t2); }
+    .skill-pct  { font-family: var(--mono); font-size: 0.625rem; color: var(--t3); }
+    .bar-track {
+      height: 6px; border-radius: 3px;
+      background: var(--surface2); overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%; border-radius: 3px; width: 0;
+      transition: width 1.4s cubic-bezier(.4,0,.2,1);
+    }
+    .fc { background: linear-gradient(90deg, var(--cyan) 0%, rgba(34,211,238,0.55) 100%); }
+    .fp { background: linear-gradient(90deg, var(--purple) 0%, rgba(167,139,250,0.55) 100%); }
+    .fg { background: linear-gradient(90deg, var(--green) 0%, rgba(74,222,128,0.55) 100%); }
+
+    /* ── Quest log ── */
+    .quests { display: flex; flex-direction: column; gap: var(--s3); }
+
+    .quest {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-lg); overflow: hidden;
+      transition: border-color 0.2s; cursor: pointer;
+      /* colored left accent per status */
+      border-left: 3px solid var(--border);
+    }
+    .quest.active-quest { border-left-color: var(--green); }
+    .quest.done-quest   { border-left-color: var(--border2); }
+
+    .quest:hover        { border-color: var(--border2); }
+    .quest.open         { border-color: rgba(34,211,238,0.4); }
+    .quest.open.active-quest { border-color: var(--green); }
+
+    .quest-top {
+      display: flex; align-items: center; gap: var(--s3);
+      padding: var(--s4) var(--s5);
+      user-select: none;
+    }
+
+    .q-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .q-dot-green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .q-dot-dim   { background: var(--t3); }
+
+    .q-name {
+      flex: 1; min-width: 0;
+      font-weight: 600; font-size: 0.9375rem;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .q-right {
+      display: flex; align-items: center; gap: var(--s3);
+      flex-shrink: 0; /* never shrink the right side */
+    }
+
+    .q-stars {
+      font-size: 0.6875rem; color: var(--amber);
+      letter-spacing: 2px;
+    }
+    .q-xp {
+      font-family: var(--mono); font-size: 0.6875rem; color: var(--cyan);
+    }
+    .q-chev {
+      font-size: 0.6rem; color: var(--t3);
+      transition: transform 0.25s ease;
+    }
+    .quest.open .q-chev { transform: rotate(180deg); }
+
+    .quest-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease;
+      border-top: 0px solid var(--border);
+    }
+    .quest.open .quest-body {
+      max-height: 700px;
+      border-top-width: 1px;
+    }
+    .quest-inner { padding: var(--s5); }
+
+    .q-desc {
+      font-size: 0.875rem; color: var(--t2);
+      line-height: 1.7; margin-bottom: var(--s4);
+    }
+    .q-bullets { list-style: none; margin-bottom: var(--s4); }
+    .q-bullets li {
+      font-size: 0.8125rem; color: var(--t2);
+      padding: 3px 0 3px var(--s4); position: relative; line-height: 1.6;
+    }
+    .q-bullets li::before {
+      content: '▸'; position: absolute; left: 0; color: var(--cyan);
+    }
+    .q-tags { display: flex; flex-wrap: wrap; gap: var(--s2); margin-bottom: var(--s5); }
+    .tag {
+      font-family: var(--mono); font-size: 0.625rem;
+      padding: 3px var(--s3); border-radius: var(--r-sm);
+      background: var(--surface2); border: 1px solid var(--border2);
+      color: var(--t3);
+    }
+    .q-links { display: flex; gap: var(--s3); }
+    .q-link {
+      font-family: var(--mono); font-size: 0.6875rem;
+      padding: var(--s2) var(--s4); border-radius: var(--r-md);
+      text-decoration: none; border: 1px solid; transition: background 0.2s, border-color 0.2s;
+    }
+    .ql-primary { color: var(--cyan); border-color: rgba(34,211,238,0.3); background: rgba(34,211,238,0.06); }
+    .ql-primary:hover { background: rgba(34,211,238,0.14); border-color: rgba(34,211,238,0.5); }
+    .ql-ghost { color: var(--t3); border-color: var(--border2); background: transparent; }
+    .ql-ghost:hover { color: var(--t2); border-color: var(--t3); }
+
+    /* ── Experience ── */
+    .exp-list { display: flex; flex-direction: column; gap: var(--s3); }
+    .exp-card {
+      display: flex; gap: var(--s4); align-items: flex-start;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: var(--s5);
+      transition: border-color 0.2s;
+    }
+    .exp-card:hover { border-color: var(--border2); }
+    .exp-icon {
+      width: 40px; height: 40px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--r-md);
+    }
+    .exp-body { flex: 1; min-width: 0; }
+    .exp-title { font-weight: 600; font-size: 0.9375rem; margin-bottom: 2px; }
+    .exp-co    { font-size: 0.8125rem; color: var(--t2); margin-bottom: var(--s2); }
+    .exp-date  { font-family: var(--mono); font-size: 0.6875rem; color: var(--t3); }
+
+    /* ── Terminal ── */
+    .term-hint {
+      padding: var(--s10) 0 var(--s3);
+      font-family: var(--mono); font-size: 0.6875rem; color: var(--t3);
+      text-align: center; cursor: pointer; transition: color 0.2s;
+    }
+    .term-hint:hover { color: var(--green); }
+    .term-hint span { color: var(--green); }
+
+    .terminal {
+      display: none;
+      background: #040408; border: 1px solid rgba(74,222,128,0.4);
+      border-radius: var(--r-lg); padding: var(--s5);
+      box-shadow: 0 0 24px rgba(74,222,128,0.06);
+    }
+    .terminal.open { display: block; }
+
+    .term-bar {
+      display: flex; gap: var(--s2); margin-bottom: var(--s3);
+    }
+    .term-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .td-red { background: #ff5f57; }
+    .td-ylw { background: #febc2e; }
+    .td-grn { background: #28c840; }
+
+    .term-out {
+      font-family: var(--mono); font-size: 0.75rem;
+      color: var(--green); line-height: 1.7;
+      white-space: pre-wrap;
+      min-height: 56px; max-height: 240px;
+      overflow-y: auto; margin-bottom: var(--s3);
+    }
+    .term-row {
+      display: flex; align-items: center; gap: var(--s2);
+      border-top: 1px solid rgba(74,222,128,0.15);
+      padding-top: var(--s3);
+    }
+    .term-prompt { font-family: var(--mono); font-size: 0.75rem; color: var(--cyan); flex-shrink: 0; }
+    .term-input {
+      flex: 1; background: transparent; border: none; outline: none;
+      font-family: var(--mono); font-size: 0.75rem; color: var(--green);
+      caret-color: var(--green);
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: var(--s8);
+      text-align: center;
+      font-family: var(--mono); font-size: 0.6875rem; color: var(--t3);
+    }
+    footer a { color: var(--cyan); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Reveal animation ── */
+    .reveal {
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* ── Responsive ── */
+    @media (max-width: 800px) {
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      nav { padding: var(--s3) var(--s4); }
+      .nav-links { gap: var(--s4); }
+      .nav-links a { font-size: 0.5625rem; }
+      main { padding: var(--s6) var(--s4) var(--s12); }
+      .skills-grid { grid-template-columns: 1fr; }
+      .pc-top { flex-wrap: wrap; }
+      .pc-level { order: -1; text-align: left; }
+      .q-stars, .q-xp { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">&gt; KK<span class="logo-cursor"></span></div>
+  <ul class="nav-links">
+    <li><a href="#quests">Quests</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#xplog">XP Log</a></li>
+    <li><a href="https://github.com/kskarp7" target="_blank">GitHub&nbsp;&#8599;</a></li>
+    <li><a href="https://www.linkedin.com/in/kenneth-k-453692259" target="_blank">LinkedIn&nbsp;&#8599;</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- ━━━ PLAYER CARD ━━━ -->
+  <div class="player-card reveal">
+    <div class="ambient"></div>
+
+    <div class="pc-top">
+      <div class="avatar">KK</div>
+
+      <div class="pc-info">
+        <div class="pc-class">// Full-Stack Engineer &middot; AI &amp; Cybersecurity &middot; Hardware</div>
+        <div class="pc-name">Kenneth Karp</div>
+        <div class="pc-badges">
+          <span class="badge bc">FAU &middot; CS Dec&nbsp;'26</span>
+          <span class="badge bg">CTO @ SafestOne</span>
+          <span class="badge bp">AI Builder</span>
+          <span class="badge ba">Hardware Hacker</span>
+          <span class="badge bc">Minor: Cybersecurity</span>
+        </div>
+      </div>
+
+      <div class="pc-level">
+        <div class="lv-label">// Level</div>
+        <div class="lv-num">21</div>
+        <div class="lv-sub">Florida,&nbsp;US</div>
+      </div>
+    </div>
+
+    <div class="xp-section">
+      <div class="xp-labels">
+        <span>Career XP</span>
+        <span>1,630&nbsp;/&nbsp;2,000</span>
+      </div>
+      <div class="xp-track">
+        <div class="xp-fill" data-w="81%"></div>
+      </div>
+    </div>
+
+    <div class="achievements">
+      <div class="ach">
+        <span class="ach-icon">&#127942;</span>
+        <span class="ach-text">CTO at 21</span>
+        <span class="ach-tip">Founded SafestOne, leading all tech</span>
+      </div>
+      <div class="ach">
+        <span class="ach-icon">&#128241;</span>
+        <span class="ach-text">App Store Published</span>
+        <span class="ach-tip">Shipped OneGoal: One Week solo</span>
+      </div>
+      <div class="ach">
+        <span class="ach-icon">&#128272;</span>
+        <span class="ach-text">OWASP Hacker</span>
+        <span class="ach-tip">Autonomous agent cracked 11 challenges</span>
+      </div>
+      <div class="ach">
+        <span class="ach-icon">&#129302;</span>
+        <span class="ach-text">ReAct Agent Author</span>
+        <span class="ach-tip">Built LLM agent with 6 custom tool calls</span>
+      </div>
+      <div class="ach">
+        <span class="ach-icon">&#9889;</span>
+        <span class="ach-text">Edge AI on Pi 5</span>
+        <span class="ach-tip">YOLO + Hailo-10H running fully on-device</span>
+      </div>
+      <div class="ach">
+        <span class="ach-icon">&#128200;</span>
+        <span class="ach-text">Algo Trader</span>
+        <span class="ach-tip">Self-retraining pipeline, Alpaca paper API</span>
+      </div>
+      <div class="ach">
+        <span class="ach-icon">&#9881;</span>
+        <span class="ach-text">Miller Electric</span>
+        <span class="ach-tip">Project Associate, offer accepted Jun 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ━━━ SKILL TREE ━━━ -->
+  <div class="section-head reveal">
+    <span class="section-label" id="skills">// Skill Tree</span>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="skills-grid reveal">
+    <div class="skill-panel">
+      <div class="skill-panel-title">Languages</div>
+
+      <div class="skill">
+        <div class="skill-meta"><span class="skill-name">Python</span><span class="skill-pct">92%</span></div>
+        <div class="bar-track"><div class="bar-fill fc" data-w="92%"></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-meta"><span class="skill-name">JavaScript / ES6+</span><span class="skill-pct">85%</span></div>
+        <div class="bar-track"><div class="bar-fill fc" data-w="85%"></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-meta"><span class="skill-name">C / C++</span><span class="skill-pct">68%</span></div>
+        <div class="bar-track"><div class="bar-fill fc" data-w="68%"></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-meta"><span class="skill-name">Swift / SwiftUI</span><span class="skill-pct">54%</span></div>
+        <div class="bar-track"><div class="bar-fill fc" data-w="54%"></div></div>
+      </div>
+    </div>
+
+    <div class="skill-panel">
+      <div class="skill-panel-title">Frameworks &amp; Tools</div>
+
+      <div class="skill">
+        <div class="skill-meta"><span class="skill-name">React</span><span class="skill-pct">83%</span></div>
+        <div class="bar-track"><div class="bar-fill fp" data-w="83%"></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-meta"><span class="skill-name">Flask / Node.js</span><span class="skill-pct">79%</span></div>
+        <div class="bar-track"><div class="bar-fill fp" data-w="79%"></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-meta"><span class="skill-name">Supabase / SQLite</span><span class="skill-pct">73%</span></div>
+        <div class="bar-track"><div class="bar-fill fp" data-w="73%"></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-meta"><span class="skill-name">Docker / Git</span><span class="skill-pct">70%</span></div>
+        <div class="bar-track"><div class="bar-fill fp" data-w="70%"></div></div>
+      </div>
+    </div>
+
+    <div class="skill-panel">
+      <div class="skill-panel-title">Specializations</div>
+
+      <div class="skill">
+        <div class="skill-meta"><span class="skill-name">AI / LLM Engineering</span><span class="skill-pct">81%</span></div>
+        <div class="bar-track"><div class="bar-fill fg" data-w="81%"></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-meta"><span class="skill-name">Cybersecurity</span><span class="skill-pct">71%</span></div>
+        <div class="bar-track"><div class="bar-fill fg" data-w="71%"></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-meta"><span class="skill-name">Edge AI / Hardware</span><span class="skill-pct">65%</span></div>
+        <div class="bar-track"><div class="bar-fill fg" data-w="65%"></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-meta"><span class="skill-name">iOS / App Store</span><span class="skill-pct">53%</span></div>
+        <div class="bar-track"><div class="bar-fill fg" data-w="53%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ━━━ QUEST LOG ━━━ -->
+  <div class="section-head reveal">
+    <span class="section-label" id="quests">// Quest Log</span>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="quests reveal">
+
+    <div class="quest active-quest open" onclick="toggleQuest(this)">
+      <div class="quest-top">
+        <span class="q-dot q-dot-green"></span>
+        <span class="q-name">SafestOne &mdash; AI Smart Mailbox Startup</span>
+        <span class="q-right">
+          <span class="q-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span class="q-xp">+500 XP</span>
+          <span class="q-chev">&#9660;</span>
+        </span>
+      </div>
+      <div class="quest-body">
+        <div class="quest-inner">
+          <p class="q-desc">Founded a startup building an AI-powered smart mailbox. Computer vision detects delivery drivers and controls a solenoid lock autonomously &mdash; no app tap required. The AI decides.</p>
+          <ul class="q-bullets">
+            <li>YOLO + Hailo-10H edge AI on Raspberry Pi 5 with two-stage PIR gate</li>
+            <li>Flask backend + PWA deployed live via Cloudflare Tunnel</li>
+            <li>Beta running &mdash; collecting real delivery driver dataset for model retraining</li>
+            <li>Built everything from hardware to cloud as Chief Technical Officer</li>
+          </ul>
+          <div class="q-tags">
+            <span class="tag">Python</span><span class="tag">YOLO</span><span class="tag">Hailo-10H</span>
+            <span class="tag">Raspberry Pi 5</span><span class="tag">Flask</span><span class="tag">Cloudflare</span><span class="tag">Edge AI</span>
+          </div>
+          <div class="q-links">
+            <a href="https://safest-one.org" target="_blank" class="q-link ql-primary">VISIT SITE &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quest done-quest" onclick="toggleQuest(this)">
+      <div class="quest-top">
+        <span class="q-dot q-dot-dim"></span>
+        <span class="q-name">juice-pentest &mdash; Autonomous Security Agent</span>
+        <span class="q-right">
+          <span class="q-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+          <span class="q-xp">+350 XP</span>
+          <span class="q-chev">&#9660;</span>
+        </span>
+      </div>
+      <div class="quest-body">
+        <div class="quest-inner">
+          <p class="q-desc">Autonomous AI agent that discovers and exploits OWASP web vulnerabilities using a ReAct loop. No human in the loop &mdash; the agent reasons, plans, and executes attacks end-to-end.</p>
+          <ul class="q-bullets">
+            <li>6 custom tools: SQL injection, JWT forger, XSS probe, endpoint recon</li>
+            <li>Sliding-window context management for 100-step autonomous runs</li>
+            <li>Solved 11 challenges across 6 OWASP Top 10 categories</li>
+            <li>Model-agnostic via LiteLLM &mdash; runs on Claude, GPT-4, or local Ollama</li>
+          </ul>
+          <div class="q-tags">
+            <span class="tag">Python</span><span class="tag">Claude API</span><span class="tag">LiteLLM</span>
+            <span class="tag">Docker</span><span class="tag">OWASP</span><span class="tag">ReAct</span><span class="tag">SQLi</span><span class="tag">JWT</span>
+          </div>
+          <div class="q-links">
+            <a href="https://github.com/kskarp7/juice-pentest" target="_blank" class="q-link ql-primary">VIEW CODE &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quest done-quest" onclick="toggleQuest(this)">
+      <div class="quest-top">
+        <span class="q-dot q-dot-dim"></span>
+        <span class="q-name">Stock Trader &mdash; Self-Learning AI Pipeline</span>
+        <span class="q-right">
+          <span class="q-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+          <span class="q-xp">+300 XP</span>
+          <span class="q-chev">&#9660;</span>
+        </span>
+      </div>
+      <div class="quest-body">
+        <div class="quest-inner">
+          <p class="q-desc">A 5-step AI pipeline that learns from its own closed trades weekly, shifting signal weights toward whatever actually predicted wins. Sentiment analysis + technicals + Kelly criterion risk management.</p>
+          <ul class="q-bullets">
+            <li>Reddit sentiment analysis combined with technical indicators as input signals</li>
+            <li>Kelly criterion position sizing to minimize ruin probability</li>
+            <li>Weekly self-retraining loop on real closed trade outcomes</li>
+            <li>Paper trading via Alpaca API &mdash; real market data, no real money at risk</li>
+          </ul>
+          <div class="q-tags">
+            <span class="tag">Python</span><span class="tag">Alpaca API</span><span class="tag">Claude API</span>
+            <span class="tag">Reddit API</span><span class="tag">SQLite</span><span class="tag">Kelly Criterion</span>
+          </div>
+          <div class="q-links">
+            <a href="https://github.com/kskarp7" target="_blank" class="q-link ql-ghost">GITHUB &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quest done-quest" onclick="toggleQuest(this)">
+      <div class="quest-top">
+        <span class="q-dot q-dot-dim"></span>
+        <span class="q-name">OneGoal: One Week &mdash; iOS App Store</span>
+        <span class="q-right">
+          <span class="q-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+          <span class="q-xp">+280 XP</span>
+          <span class="q-chev">&#9660;</span>
+        </span>
+      </div>
+      <div class="quest-body">
+        <div class="quest-inner">
+          <p class="q-desc">The simplest focus app on the App Store. One goal. One week. One tap a day. No account. No subscription. Free forever. Built and shipped solo from idea to App Store approval.</p>
+          <ul class="q-bullets">
+            <li>Live on the iOS App Store &mdash; designed, built, and submitted entirely solo</li>
+            <li>Zero friction: no login, no paywall, no onboarding</li>
+            <li>Weekly goal streaks with a single daily check-in tap</li>
+            <li>Native SwiftUI &mdash; no third-party frameworks, clean and fast</li>
+          </ul>
+          <div class="q-tags">
+            <span class="tag">Swift</span><span class="tag">SwiftUI</span><span class="tag">iOS</span><span class="tag">Xcode</span><span class="tag">App Store</span>
+          </div>
+          <div class="q-links">
+            <a href="https://apps.apple.com/us/app/one-goal-one-week/id6762137153" target="_blank" class="q-link ql-primary">APP STORE &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quest done-quest" onclick="toggleQuest(this)">
+      <div class="quest-top">
+        <span class="q-dot q-dot-dim"></span>
+        <span class="q-name">React Portfolio &mdash; 6 Full-Stack Apps</span>
+        <span class="q-right">
+          <span class="q-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span>
+          <span class="q-xp">+200 XP</span>
+          <span class="q-chev">&#9660;</span>
+        </span>
+      </div>
+      <div class="quest-body">
+        <div class="quest-inner">
+          <p class="q-desc">Six production-quality React applications &mdash; Supabase CRUD with row-level security, analytics dashboards with Recharts, third-party REST API integrations, and real-time data feeds.</p>
+          <ul class="q-bullets">
+            <li>Supabase CRUD apps with auth and row-level security policies</li>
+            <li>Analytics dashboards built with Recharts and live data</li>
+            <li>Third-party REST API integrations across multiple projects</li>
+            <li>Vite build pipeline, fully responsive across all apps</li>
+          </ul>
+          <div class="q-tags">
+            <span class="tag">React</span><span class="tag">Supabase</span><span class="tag">Recharts</span>
+            <span class="tag">REST APIs</span><span class="tag">Vite</span><span class="tag">JavaScript</span>
+          </div>
+          <div class="q-links">
+            <a href="https://github.com/kskarp7" target="_blank" class="q-link ql-ghost">GITHUB &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ━━━ XP LOG ━━━ -->
+  <div class="section-head reveal">
+    <span class="section-label" id="xplog">// XP Log &mdash; Experience</span>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="exp-list reveal">
+    <div class="exp-card">
+      <div class="exp-icon">&#9889;</div>
+      <div class="exp-body">
+        <div class="exp-title">Project Associate
+          <span style="font-weight:400;color:var(--t3);font-size:0.8125rem;"> &mdash; offer accepted June 2026</span>
+        </div>
+        <div class="exp-co">Miller Electric Company</div>
+        <div class="exp-date">May 2025 &ndash; Present</div>
+      </div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-icon">&#128640;</div>
+      <div class="exp-body">
+        <div class="exp-title">Chief Technical Officer</div>
+        <div class="exp-co">SafestOne</div>
+        <div class="exp-date">October 2025 &ndash; Present</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ━━━ TERMINAL ━━━ -->
+  <div class="term-hint" onclick="openTerminal()">
+    $ type <span>help</span> to open terminal &#9646;
+  </div>
+
+  <div class="terminal" id="terminal">
+    <div class="term-bar">
+      <div class="term-dot td-red"></div>
+      <div class="term-dot td-ylw"></div>
+      <div class="term-dot td-grn"></div>
+    </div>
+    <div class="term-out" id="term-out">kenneth@portfolio:~$ <span style="color:var(--t3)">// welcome. type 'help' for commands.</span>
+</div>
+    <div class="term-row">
+      <span class="term-prompt">kenneth@portfolio:~$&nbsp;</span>
+      <input class="term-input" id="term-input" type="text" autocomplete="off" spellcheck="false">
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  kenneth karp &nbsp;&middot;&nbsp;
+  <a href="mailto:kskarp7@gmail.com">kskarp7@gmail.com</a>
+  &nbsp;&middot;&nbsp; 561.251.5685 &nbsp;&middot;&nbsp; Florida,&nbsp;US
+</footer>
+
+<script>
+  // ── Scroll reveal ──
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      e.target.querySelectorAll('[data-w]').forEach(el => { el.style.width = el.dataset.w; });
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // animate anything already visible on load
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.reveal').forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight) {
+        el.classList.add('in');
+        el.querySelectorAll('[data-w]').forEach(b => { b.style.width = b.dataset.w; });
+      }
+    });
+  });
+
+  // ── Quest accordion ──
+  function toggleQuest(card) {
+    const wasOpen = card.classList.contains('open');
+    document.querySelectorAll('.quest').forEach(c => c.classList.remove('open'));
+    if (!wasOpen) card.classList.add('open');
+  }
+
+  // ── Terminal ──
+  function openTerminal() {
+    document.getElementById('terminal').classList.add('open');
+    document.getElementById('term-input').focus();
+  }
+
+  const cmds = {
+    help: `commands:
+  whoami    player profile
+  skills    full skill list
+  quests    quest summary
+  contact   contact info
+  clear     clear terminal
+  exit      close terminal`,
+    whoami: `PLAYER:   Kenneth Karp
+CLASS:    Full-Stack Engineer · AI & Cybersecurity
+LEVEL:    21  |  XP: 1,630 / 2,000
+GUILD:    FAU Computer Science (Dec 2026)
+ROLE:     Chief Technical Officer @ SafestOne
+LOCATION: Florida, US`,
+    skills: `SKILL TREE:
+  Python          ████████████░░  92%   Expert
+  JavaScript      ███████████░░░  85%   Advanced
+  React           ██████████░░░░  83%   Advanced
+  Flask / Node    █████████░░░░░  79%   Advanced
+  AI / LLM Eng    ██████████░░░░  81%   Advanced
+  Cybersecurity   █████████░░░░░  71%   Proficient
+  Edge AI / HW    ████████░░░░░░  65%   Proficient
+  C / C++         ████████░░░░░░  68%   Proficient
+  Swift / iOS     ██████░░░░░░░░  54%   Intermediate`,
+    quests: `QUEST LOG:
+  [ACTIVE]  ★★★★★  SafestOne AI Smart Mailbox       +500 XP
+  [DONE]    ★★★★☆  juice-pentest Security Agent     +350 XP
+  [DONE]    ★★★★☆  Stock Trader Self-Learning AI    +300 XP
+  [DONE]    ★★★★☆  OneGoal: One Week (App Store)    +280 XP
+  [DONE]    ★★★☆☆  React Portfolio (6 apps)         +200 XP
+                                          TOTAL:  1,630 XP`,
+    contact: `CONTACT:
+  Email:    kskarp7@gmail.com
+  GitHub:   github.com/kskarp7
+  LinkedIn: linkedin.com/in/kenneth-k-453692259
+  Phone:    561.251.5685`,
+    clear: '__clear__',
+    exit:  '__exit__',
+  };
+
+  document.getElementById('term-input').addEventListener('keydown', function(e) {
+    if (e.key !== 'Enter') return;
+    const val = this.value.trim().toLowerCase();
+    const out = document.getElementById('term-out');
+    const r = cmds[val];
+    if (r === '__clear__')    { out.textContent = ''; }
+    else if (r === '__exit__') { document.getElementById('terminal').classList.remove('open'); }
+    else if (r) { out.textContent += `kenneth@portfolio:~$ ${this.value}\n${r}\n\n`; }
+    else if (val) { out.textContent += `kenneth@portfolio:~$ ${this.value}\nbash: ${val}: command not found. try 'help'\n\n`; }
+    this.value = '';
+    out.scrollTop = out.scrollHeight;
+  });
+</script>
+</body>
+</html>
