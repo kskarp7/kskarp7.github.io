@@ -712,6 +712,38 @@
       </div>
     </div>
 
+    <div class="quest active-quest" onclick="toggleQuest(this)">
+      <div class="quest-top">
+        <span class="q-dot q-dot-green"></span>
+        <span class="q-name">Nexus &mdash; Distributed Multi-Agent AI System</span>
+        <span class="q-right">
+          <span class="q-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span class="q-xp">+450 XP</span>
+          <span class="q-chev">&#9660;</span>
+        </span>
+      </div>
+      <div class="quest-body">
+        <div class="quest-inner">
+          <p class="q-desc">A self-hosted multi-agent AI command center deployed across two physical machines: a Windows server node and a headless Ubuntu inference box running Ollama. Eleven specialized agents run autonomous overnight research and build pipelines &mdash; zero cloud AI cost.</p>
+          <ul class="q-bullets">
+            <li>Distributed across two LAN-networked machines with automatic 30-second health-check failover between them</li>
+            <li>11 agents with distinct roles, system prompts, and tool access (web search, file I/O, code generation)</li>
+            <li>Node.js WebSocket server streams LLM tokens in real-time; serialized request queue prevents CPU-bound inference collisions</li>
+            <li>Custom HTML5 Canvas pixel-art RPG dashboard with sprite animation, glassmorphism UI, and live typewriter bubble effects</li>
+            <li>Agents run autonomous overnight pipelines (SafestOne market intel, stock trader review, code sprints) via Windows Scheduled Tasks</li>
+          </ul>
+          <div class="q-tags">
+            <span class="tag">Node.js</span><span class="tag">WebSocket</span><span class="tag">Ollama</span>
+            <span class="tag">LLM</span><span class="tag">HTML5 Canvas</span><span class="tag">Ubuntu Server</span>
+            <span class="tag">Distributed Systems</span><span class="tag">Multi-Agent AI</span>
+          </div>
+          <div class="q-links">
+            <a href="https://github.com/kskarp7" target="_blank" class="q-link ql-ghost">GITHUB &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="quest done-quest" onclick="toggleQuest(this)">
       <div class="quest-top">
         <span class="q-dot q-dot-dim"></span>
@@ -948,6 +980,7 @@ LOCATION: Florida, US`,
   Swift / iOS     ██████░░░░░░░░  54%   Intermediate`,
     quests: `PROJECTS:
   [ACTIVE]  ★★★★★  SafestOne — AI Smart Mailbox
+  [ACTIVE]  ★★★★★  Nexus — Distributed Multi-Agent AI
   [DONE]    ★★★★☆  juice-pentest — Security Agent
   [DONE]    ★★★★☆  Stock Trader — Algorithmic AI Pipeline
   [DONE]    ★★★★☆  OneGoal: One Week — iOS App Store
